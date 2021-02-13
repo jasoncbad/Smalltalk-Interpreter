@@ -1,0 +1,31 @@
+ 3.141592653589793 2.718281828459045
+LetStmt inherits Stmt>>interp: (LetStmt (VarExpr #pi) (BinopExpr #* (NumExpr 4.0) (UnopExpr #arcTan (NumExpr 1.0))))
+LetStmt inherits Stmt>>interp: (LetStmt (VarExpr #e) (UnopExpr #exp (NumExpr 1.0)))
+pi =  3.141592653589793
+e =  2.718281828459045
+sqrt  (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #sqrt (VarExpr #pi))
+NaN
+exp   (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #exp (VarExpr #pi))
+NaN
+log   (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #ln (VarExpr #pi))
+NaN
+sin   (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #sin (VarExpr #pi))
+NaN
+cos   (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #cos (VarExpr #pi))
+NaN
+tan   (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #tan (VarExpr #pi))
+NaN
+acos  (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #arcCos (VarExpr #pi))
+NaN
+asin  (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #arcSin (VarExpr #pi))
+NaN
+atan  (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #arcTan (VarExpr #pi))
+NaN
+abs   (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #abs (VarExpr #pi))
+NaN
+ceil  (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #ceiling (VarExpr #pi))
+NaN
+floor (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #floor (VarExpr #pi))
+NaN
+round (pi) =  UnopExpr inherits Expr>>value: (UnopExpr #rounded (VarExpr #pi))
+NaN

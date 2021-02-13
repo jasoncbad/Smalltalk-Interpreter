@@ -1,0 +1,11 @@
+GotoStmt inherits Stmt>>interp: (GotoStmt #zero)
+four
+GotoStmt inherits Stmt>>interp: (GotoStmt #done)
+one
+GotoStmt inherits Stmt>>interp: (GotoStmt #two)
+three
+GotoStmt inherits Stmt>>interp: (GotoStmt #four)
+two
+GotoStmt inherits Stmt>>interp: (GotoStmt #three)
+zero
+GotoStmt inherits Stmt>>interp: (GotoStmt #one)

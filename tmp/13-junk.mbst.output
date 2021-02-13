@@ -1,0 +1,4 @@
+GotoStmt inherits Stmt>>interp: (GotoStmt #nolabel)
+DimStmt inherits Stmt>>interp: (DimStmt (ArrayExpr #a) (NumExpr 10.0))
+LetStmt inherits Stmt>>interp: (LetStmt (BinopExpr #aput (ArrayExpr #a) (NumExpr 50.0)) (NumExpr 3.0))
+LetStmt inherits Stmt>>interp: (LetStmt (BinopExpr #aput (ArrayExpr #noarray) (NumExpr 5.0)) (BinopExpr #aget (ArrayExpr #a) (NumExpr 90.0)))

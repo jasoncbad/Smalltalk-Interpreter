@@ -1,0 +1,6 @@
+LetStmt inherits Stmt>>interp: (LetStmt (VarExpr #i) (NumExpr 1.0))
+LetStmt inherits Stmt>>interp: (LetStmt (VarExpr #j) (BinopExpr #+ (VarExpr #i) (NumExpr 3.0)))
+LetStmt inherits Stmt>>interp: (LetStmt (VarExpr #k) (BinopExpr #+ (BinopExpr #* (NumExpr 8.0) (VarExpr #i)) (BinopExpr #/ (NumExpr 9.0) (VarExpr #j))))
+i= 0.0
+j= 0.0
+k= 0.0
