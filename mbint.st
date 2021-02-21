@@ -97,6 +97,7 @@ Expr subclass: UnopExpr [
 
 Expr subclass: BinopExpr [
    |oper opnd1 opnd2|
+
    BinopExpr class >> new: op with: opn1 with: opn2 [
       ^ super new init: op with: opn1 with: opn2.
    ]
@@ -107,6 +108,11 @@ Expr subclass: BinopExpr [
       ^ file << self prefix << oper << ' ' << opnd1
              << ' ' << opnd2 << ')'.
    ]
+
+   value [ 
+      | result | 
+      result := opnd1 perform: oper with: opnd2. 
+      ^ result]
 ].
 
 Expr subclass: ArrayExpr [
