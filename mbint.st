@@ -157,7 +157,6 @@ MiniBasic subclass: Stmt [ "abstract base class"
    Stmt class >> getStmtNr [^ stmtNr]
    Stmt class >> incrStmtNr [stmtNr := stmtNr + 1]   
    labelDict := Dictionary new.
-   Stmt class >> putLabel: args [labelDict at: (args at: 1) put: (args at: 2)] 
    printOn: file [^ file << self prefix << ')']
    interp [MiniBasic unimplemented: self.]
 ].
@@ -279,16 +278,40 @@ Stmt extend [
       stmtClass := stmtDict at: stmtSym.     
       ^ stmtClass new: stmt.
    ] 
+
+   Stmt class >> putLabel: args [
+      labelDict at: (args at: 1) put: (args at: 2).
+      labelDict inspect.
+   ]
 ]
 
 MiniBasic subclass: Interpreter [
-   |statements|
+   |statements label|
    Interpreter class >> new: program [^ super new init: program]
    init: program [
       statements := Array new: program size.
       1 to: program size do: [:index|
          |stmt parsed|
+
+         "added this line to get the label"
+         label := (program at: index) at: 2.
+
          stmt := (program at: index) at: 3.
+
+         "working label population. Note that this code lives in the init
+         method of the interpreter and thus gets performed alongside 
+         statement parsing"
+         label isNil ifFalse: [
+            |stmtNr args|
+            stmtNr := (program at: index) at: 1.
+
+            args := Array new: 2.
+
+            args at: 1 put: label.
+            args at: 2 put: stmtNr.
+            Stmt putLabel: args
+         ].
+
          statements at: index put: (Stmt parse: stmt).
       ].
    ]
@@ -347,7 +370,8 @@ Object subclass: Main [
       ^ fileName.
    ]
 
-   Main class >> scanForLabels: program [
+
+  " Main class >> scanForLabels: program [
       1 to: program size do: [ :stmtNr | 
          |label result|
          label := (program at: stmtNr) at: 2.
@@ -355,7 +379,7 @@ Object subclass: Main [
             Stmt putLabel: #(label stmtNr). 
          ].
       ].
-   ]
+   ]"
 
    Main class >> main [
       |fileName|
@@ -368,7 +392,7 @@ Object subclass: Main [
          Debug > 0 ifTrue: [Main print: program].
          interpreter := Interpreter new: program.
          Debug > 0 ifTrue: [interpreter print].
-         Main scanForLabels: program.
+         "Main scanForLabels: program."
          interpreter interpret.
       ] on: SystemExceptions.FileError do: [:signal|
          stderr << scriptName << ': ' << fileName << ': '
