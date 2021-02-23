@@ -154,9 +154,10 @@ Expr extend [
 
 MiniBasic subclass: Stmt [ "abstract base class"
    stmtNr := 1.
+   labelDict := Dictionary new.
    Stmt class >> getStmtNr [^ stmtNr]
    Stmt class >> incrStmtNr [stmtNr := stmtNr + 1]   
-   labelDict := Dictionary new.
+   Stmt class >> performGoto: label [stmtNr := labelDict at: label]
    printOn: file [^ file << self prefix << ')']
    interp [MiniBasic unimplemented: self.]
 ].
@@ -193,7 +194,8 @@ Stmt subclass: GotoStmt [
    printOn: file [^ file << self prefix << label << ')']
 
    interp [
-     Debug > 2 ifTrue: [label inspect].
+      Debug > 2 ifTrue: [label inspect]. 
+      Stmt performGoto: label.
    ]
 ].
 
@@ -303,7 +305,7 @@ MiniBasic subclass: Interpreter [
          statement parsing"
          label isNil ifFalse: [
             |stmtNr args|
-            stmtNr := (program at: index) at: 1.
+            stmtNr := index.
 
             args := Array new: 2.
 
