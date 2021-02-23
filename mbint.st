@@ -109,9 +109,13 @@ Expr subclass: BinopExpr [
       ^ file << self prefix << oper << ' ' << opnd1
              << ' ' << opnd2 << ')'.
    ]
-
+   getOperator [^ oper]
+   getOp1 [^ opnd1]
+   getOp2 [^ opnd2]
    value [ 
-      | result | 
+      | result |
+      oper = #aget ifTrue: [^ opnd1 aget: opnd2 value asInteger].
+      "oper = #aput ifTrue: [^ opnd1 put: opnd2 value asInteger]."
       result := (opnd1 value) perform: oper with: (opnd2 value). 
       ^ result]
 ].
@@ -122,6 +126,15 @@ Expr subclass: ArrayExpr [
    ArrayExpr class >> new: var [^ super new init: var]
    init: var [arrayName := var]
    printOn: file [^ file << self prefix << arrayName << ')']
+   
+   "adds an array to the arrayDict given its size and initializes its values"
+   create: size [arrayDict at: arrayName put: (Array new: size)]
+
+   "put takes args (index value) and performs a put at the specified index"
+   aput: args [(arrayDict at: arrayName) at: (args at: 1) put: (args at: 2)]
+   
+   "value takes an index and returns the value at that index"
+   aget: index [^ (arrayDict at: arrayName) at: index]
 ].
 
 Expr extend [
@@ -170,6 +183,9 @@ Stmt subclass: DimStmt [
       size := Expr parse: (stmt at: 3).
    ]
    printOn: file [^ file << self prefix << name << ' ' << size << ')']
+   interp [
+      name create: size value asInteger.  
+   ]
 ].
 
 Stmt subclass: LetStmt [
@@ -181,7 +197,19 @@ Stmt subclass: LetStmt [
    ]
    printOn: file [^ file << self prefix << name << ' ' << expr << ')']
    
-   interp [
+   interp [ 
+      "name inspect"
+      name class == BinopExpr ifTrue: [
+         name getOperator = #aget ifTrue: [name getOp1 aget: (name getOp2 value asInteger). ^ self].
+         name getOperator = #aput ifTrue: [
+            |args|
+            args := Array new: 2.
+            args at: 1 put: (name getOp2 value asInteger).
+            args at: 2 put: (expr value).
+            name getOp1 aput: args 
+         ].
+         ^ self
+      ].    
       Debug > 2 ifTrue: [ name inspect. expr inspect].
       name put: (expr value)
    ]
@@ -283,7 +311,7 @@ Stmt extend [
 
    Stmt class >> putLabel: args [
       labelDict at: (args at: 1) put: (args at: 2).
-      labelDict inspect.
+      "labelDict inspect."
    ]
 ]
 

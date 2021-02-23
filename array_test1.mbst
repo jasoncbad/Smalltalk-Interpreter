@@ -1,0 +1,25 @@
+Object subclass: Program [
+Program class >> get [
+^ #(
+#( 6 nil #( #let #size 100d0))
+#( 7 nil #( #dim #a #size))
+#( 8 nil #( #print #( 'array size 100 initialized...')))
+#( 9 nil #( #print #( 'here are some values...')))
+#( 10 nil #( #print #( #( #aget #a 1d0))))
+#( 11 nil #( #print #( #( #aget #a 2d0))))
+#( 12 nil #( #print #( #( #aget #a 3d0))))
+#( 13 nil #( #print #( 'changing index 100, 80, 60 to value 69...')))
+#( 14 nil #( #let #( #aput #a 100d0) 69d0))
+#( 15 nil #( #let #( #aput #a 80d0) 69d0))
+#( 16 nil #( #let #( #aput #a 60d0) 69d0))
+#( 17 nil #( #print #( 'printing out these indexes...')))
+#( 18 nil #( #print #( #( #aget #a 100d0))))
+#( 19 nil #( #print #( #( #aget #a 80d0))))
+#( 20 nil #( #print #( #( #aget #a 60d0))))
+#( 21 nil #( #print #( 'printing out some other indexes that havent been changed...')))
+#( 22 nil #( #print #( #( #aget #a 99d0))))
+#( 23 nil #( #print #( #( #aget #a 79d0))))
+#( 24 nil #( #print #( #( #aget #a 69d0))))
+#( 26 nil #( #print #( 'this concludes the testing suite')))
+#( 27 nil #( #print #( 'now fuck off')))
+).]]

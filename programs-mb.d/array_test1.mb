@@ -1,0 +1,27 @@
+# $Id: 40-sort-array.mb,v 1.2 2021-01-17 20:45:55-08 - - $
+# Sort numbers.
+# Input is a sequence of numbers ending with end of file.
+# User is assumed to have not more than 100 numbers.
+# Note that nan != nan, other was x = x for all x that is not nan.
+        let size = 100
+        dim a[size]
+        print "array size 100 initialized..."
+        print "here are some values..."
+        print a[1]
+        print a[2]
+        print a[3]
+        print "changing index 100, 80, 60 to value 69..."
+        let a[100] = 69
+        let a[80] = 69
+        let a[60] = 69
+	print "printing out these indexes..."
+        print a[100]
+ 	print a[80]
+	print a[60]
+        print "printing out some other indexes that havent been changed..."
+        print a[99]
+	print a[79]
+	print a[69]
+
+        print "this concludes the testing suite"
+        print "now fuck off" 
