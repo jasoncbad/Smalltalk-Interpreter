@@ -155,8 +155,9 @@ Expr extend [
 MiniBasic subclass: Stmt [ "abstract base class"
    stmtNr := 1.
    Stmt class >> getStmtNr [^ stmtNr]
-   Stmt class >> incrStmtNr [stmtNr := stmtNr + 1]
+   Stmt class >> incrStmtNr [stmtNr := stmtNr + 1]   
    labelDict := Dictionary new.
+   Stmt class >> putLabel: args [labelDict at: (args at: 1) put: (args at: 2)] 
    printOn: file [^ file << self prefix << ')']
    interp [MiniBasic unimplemented: self.]
 ].
@@ -191,6 +192,10 @@ Stmt subclass: GotoStmt [
    GotoStmt class >> new: stmt [^ super new init: stmt]
    init: stmt [label := stmt at: 2]
    printOn: file [^ file << self prefix << label << ')']
+
+   interp [
+     Debug > 2 ifTrue: [label inspect].
+   ]
 ].
 
 Stmt subclass: IfStmt [
@@ -271,9 +276,9 @@ Stmt extend [
       |stmtSym stmtClass|
       stmt size = 0 ifTrue: [stmtSym := #null]
                     ifFalse: [stmtSym := stmt at: 1].
-      stmtClass := stmtDict at: stmtSym.
+      stmtClass := stmtDict at: stmtSym.     
       ^ stmtClass new: stmt.
-   ]
+   ] 
 ]
 
 MiniBasic subclass: Interpreter [
@@ -342,6 +347,16 @@ Object subclass: Main [
       ^ fileName.
    ]
 
+   Main class >> scanForLabels: program [
+      1 to: program size do: [ :stmtNr | 
+         |label result|
+         label := (program at: stmtNr) at: 2.
+         label isNil ifFalse: [
+            Stmt putLabel: #(label stmtNr). 
+         ].
+      ].
+   ]
+
    Main class >> main [
       |fileName|
       fileName := Main getopts.
@@ -353,6 +368,7 @@ Object subclass: Main [
          Debug > 0 ifTrue: [Main print: program].
          interpreter := Interpreter new: program.
          Debug > 0 ifTrue: [interpreter print].
+         Main scanForLabels: program.
          interpreter interpret.
       ] on: SystemExceptions.FileError do: [:signal|
          stderr << scriptName << ': ' << fileName << ': '
@@ -363,4 +379,3 @@ Object subclass: Main [
 ].
 
 Main main.
-
