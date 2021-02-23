@@ -179,6 +179,11 @@ Stmt subclass: LetStmt [
       expr := Expr parse: (stmt at: 3).
    ]
    printOn: file [^ file << self prefix << name << ' ' << expr << ')']
+   
+   interp [
+      Debug > 2 ifTrue: [ name inspect. expr inspect].
+      name put: (expr value)
+   ]
 ].
 
 Stmt subclass: GotoStmt [
