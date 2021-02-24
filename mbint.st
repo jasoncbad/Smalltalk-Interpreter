@@ -78,7 +78,7 @@ Expr subclass: VarExpr [
    VarExpr class >> new: var [^ super new init: var]
    init: var [variable := var]
    printOn: file [^ file << self prefix << variable << ')']
-   put: val [varDict at: variable put: val]
+   put: val [varDict at: variable put: val.]
    value [^ varDict at: variable ifAbsent: [0.0]]
 ].
 
@@ -134,7 +134,7 @@ Expr subclass: ArrayExpr [
    aput: args [(arrayDict at: arrayName) at: (args at: 1) put: (args at: 2)]
    
    "value takes an index and returns the value at that index"
-   aget: index [^ (arrayDict at: arrayName) at: index]
+   aget: index [index inspect. ^ (arrayDict at: arrayName) at: index]
 ].
 
 Expr extend [
@@ -200,11 +200,11 @@ Stmt subclass: LetStmt [
    interp [ 
       "name inspect"
       name class == BinopExpr ifTrue: [
-         name getOperator = #aget ifTrue: [name getOp1 aget: (name getOp2 value asInteger). ^ self].
+         name getOperator = #aget ifTrue: [name getOp1 aget: ((name getOp2 value) + 1.0 ) asInteger. ^ self].
          name getOperator = #aput ifTrue: [
             |args|
             args := Array new: 2.
-            args at: 1 put: (name getOp2 value asInteger).
+            args at: 1 put: ( (name getOp2 value) + 1.0 ) asInteger.
             args at: 2 put: (expr value).
             name getOp1 aput: args 
          ].
@@ -255,10 +255,12 @@ Stmt subclass: InputStmt [
    printOn: file [^ file << self prefix << inputVars << ')']
    interp [
       inputVars do: [:var|
-         |value|
-         value := stdinNumbers nextNumber.
-         stdout << thisContext method << ' '
-                << var << ': ' << value << nl.
+         |val|
+         (VarExpr new: #eof) value = 1.0 ifTrue: [^ nil].
+         val := stdinNumbers nextNumber.
+         var inspect.
+         var put: val asInteger.
+         stdinNumbers atEnd ifTrue: [(VarExpr new: #eof) put: 1.0].
       ].
    ]
 ].

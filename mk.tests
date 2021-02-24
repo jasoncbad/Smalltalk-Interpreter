@@ -28,7 +28,7 @@ echo 1 42 69 107 |  \
 ./mbint.st 32-factorial.mbst    >32-factorial.log    2>&1
 
 echo 5 1 4 2 3 10 1024 0 | \
-./mbint.st -d 40-sort-array.mbst   >40-sort-array.log   2>&1
+./mbint.st 40-sort-array.mbst   >40-sort-array.log   2>&1
 
 ./mbint.st 41-eratosthenes.mbst >41-eratosthenes.log 2>&1
 
